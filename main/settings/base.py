@@ -42,12 +42,17 @@ INSTALLED_APPS = [
     # Third party apps:
     'drf_yasg',
     'rest_framework',
-    'rest_framework.authtoken',
-    'dj_rest_auth',
+    #'rest_framework.authtoken',
+    # 'dj_rest_auth',
+    'stock_app.apps.StockAppConfig',
+    'django_filters',
+    'rest_framework_simplejwt.token_blacklist',
 
     # My Apps
     'users',
-    'blogapp',
+   
+   
+    #'stock_app',
   
 
 ]
@@ -67,7 +72,7 @@ ROOT_URLCONF = 'main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS':  [BASE_DIR ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,9 +136,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ]
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #      'rest_framework.authentication.TokenAuthentication',
+    #  ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+   
 }
 
 
@@ -177,7 +190,7 @@ LOGGING = {
         "django": {
             "handlers": ["console", 'file'],
             # log level describes the severity of the messages that the logger will handle.
-            "level": config("DJANGO_LOG_LEVEL", "INFO"),
+            "level": ("INFO"),
             'propagate': True,
             # If False, this means that log messages written to django.request
             # will not be handled by the django logger.
